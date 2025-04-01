@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashco</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+    <header class="header" id="header">
+        <h1>Dashco</h1>
+        <!--real time button here-->
+    </header>
+
+    <div class = "IntrodutionContainer">
+        <h2>Welcome to Dashco</h2>
+        <p>Dashco is a simple and easy to use dashboard for your computer. It allows you to quickly access your favorite applications and websites.</p>
+        <p>To get started, click on the button below to add your first application.</p>
+    </div> <!-- IntrodutionContainer -->
+
+    <div class="appContainer" id="appContainer">
+            <div class = "graphContainer" id="graphContainer">
+
+    <!-- Gráfico de Barras -->
+    <div class="graphBox">
+        <img src="images/bar_chart.png" alt="Gráfico de Barras">
+        <h3><a href="bars.html">Gráfico de Barras</a></h3>
+        <p>Comparación de muertes por COVID en diferentes regiones.</p>
+    </div>
+
+    <!-- Gráfico de Líneas -->
+    <div class="graphBox">
+        <img src="images/line_chart.png" alt="Gráfico de Líneas">
+        <h3><a href="line.html">Gráfico de Líneas</a></h3>
+        <p>Evolución de muertes por COVID a lo largo del tiempo.</p>
+    </div>
+
+    <!-- Gráfico de Pastel -->
+    <div class="graphBox">
+        <img src="images/pie_chart.png" alt="Gráfico de Pastel">
+        <h3><a href="cake.html">Gráfico de Pastel</a></h3>
+        <p>Distribución de muertes por grupo de edad.</p>
+    </div>
+
+    <!-- Mapa de Calor -->
+    <div class="graphBox">
+        <img src="images/heatmap.png" alt="Mapa de Calor">
+        <h3><a href="heat.html">Mapa de Calor</a></h3>
+        <p>Regiones más afectadas por el COVID según la densidad de casos.</p>
+    </div>
+
+    <!-- Gráfico por Países -->
+    <div class="graphBox">
+        <img src="images/world_map.png" alt="Gráfico por Países">
+        <h3><a href="country.html">Gráfico por Países</a></h3>
+        <p>Distribución de muertes por COVID en distintos países.</p>
+    </div>
+            </div> <!-- graphContainer -->
+       </div> <!-- appContainer -->
+
+    <div class="footer" id="footer">
+        <p>Dashco is a simple and easy to use dashboard for your computer. It allows you to quickly access your favorite applications and websites.</p>
+        <p>To get started, click on the button below to add your first application.</p>
+        <a href="https://github.com/MarcusRambal/DashCo">Github</a>
+    </div> <!-- footer -->
+
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="renderer.js"></script>
+</body>
+</html>
+
+    
+  

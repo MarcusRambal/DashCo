@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashco - Gráfico de Barras</title>
+    <link rel="stylesheet" href="line.css">
+</head>
+<body>
+    <header class="header" id="header">
+        <h1>Dashco</h1>
+        <a href="index.html">Volver a la página principal</a>
+        <!-- Botón para alternar modo en tiempo real (opcional) -->
+    </header>
+
+    <div class="LineContainer" id="LineContainer">
+        <h2>Gráfico de Barras</h2>
+        <p>Comparación de muertes por COVID en diferentes regiones.</p>
+
+        <!-- Sección de selección de países -->
+        <div id="country-selection">
+            <h3>Selecciona países</h3>
+            <div id="country-list">
+
+            </div>
+            <button id="update-chart">Actualizar gráfico</button>
+        </div>
+
+        <!-- Contenedor del gráfico -->
+        <div id="LineChart"></div>
+    </div>
+
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="line.js"></script>
+</body>
+</html>
