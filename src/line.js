@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 document.addEventListener('DOMContentLoaded', async () => {
   const updateChartButton = document.getElementById('update-chart')
 
@@ -49,7 +50,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         throw new Error('Network response was not ok')
       }
       const data = await response.json()
-      // console.log(data)
+      console.log(data)
       return data
     } catch (error) {
       console.error('Error al obtener los datos:', error)
@@ -57,6 +58,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   async function drawLineChart (data) {
+    // eslint-disable-next-line no-undef
     d3.select('#LineChart').selectAll('*').remove()
 
     const margin = { top: 30, right: 80, bottom: 40, left: 50 }
