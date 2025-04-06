@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const express = require('express')
 const mysql = require('mysql2')
 const cors = require('cors')
@@ -21,6 +22,9 @@ db.connect(err => {
   }
   console.log('✅ Conectado a MySQL')
 })
+
+app.use(express.static('src'))
+app.use('/assets', express.static('assets'))
 
 app.get('/countries', (req, res) => {
   const query = 'SELECT DISTINCT entity FROM casos_covid'
@@ -46,7 +50,7 @@ app.get('/data', (req, res) => {
           GROUP BY entity, month
           ORDER BY entity, month`
 
-  db.query(query, [selectedCountries], (err, results) => {
+  db.query(query, selectedCountries, (err, results) => {
     if (err) {
       console.error('🚨 Error en la consulta:', err)
       return res.status(500).send('Error en la base de datos')
@@ -74,6 +78,32 @@ app.get('/data', (req, res) => {
 
     res.json(formatted)
     console.log('✅ Consulta de datos exitosa')
+  })
+})
+
+app.get('/HeatData', (req, res) => {
+  const query = `
+    SELECT entity AS country, DATE_FORMAT(day, '%Y-%m-01') AS month, SUM(daily_deaths) AS total_deaths
+    FROM casos_covid
+    GROUP BY entity, month
+    ORDER BY month, country
+  `
+
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('🚨 Error en la consulta:', err)
+      return res.status(500).send('Error en la base de datos')
+    }
+
+    const dataByMonth = {}
+
+    results.forEach(row => {
+      const { country, month, total_deaths } = row
+      if (!dataByMonth[month]) dataByMonth[month] = {}
+      dataByMonth[month][country] = total_deaths
+    })
+
+    res.json(dataByMonth)
   })
 })
 
