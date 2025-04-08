@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BarsGraph</title>
+    <link rel="stylesheet" href="bars.css">
 </head>
 <body>
     <header class="header" id="header">
@@ -12,11 +13,19 @@
         <!--real time button here-->
     </header>
 
-    <div class="barContainer" id="barContainer">
-        <h2>Gráfico de Barras</h2>
-        <p>Comparación de muertes por COVID en diferentes regiones.</p>
-        <div id="barChart"></div>
-    </div>
+    <div id="barChartContainer" style="width: 100%; overflow-x: auto;">
+        <svg id="barChart" height="500">
+        </svg>
+        <div id="tooltip" style="position: absolute; opacity: 0; background: #fff; border: 1px solid #ccc; padding: 5px; border-radius: 3px; pointer-events: none;"></div>
+      </div> <!-- barChartContainer -->
+      
+      <select id="barYearSelector">
+        <!-- aquí se llenan los meses dinámicamente -->
+      </select>
+
+      <button id = "showMore">Mostrar mas</button>
+      
+      
 
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <script src="bars.js"></script>
