@@ -1,16 +1,28 @@
 /* eslint-disable no-undef */
 document.addEventListener('DOMContentLoaded', async () => {
   const yearSelector = document.getElementById('yearSelector')
-  const width = 900
+  const width = 1200
   const height = 600
-
-  const colorScale = d3.scaleSequential(d3.interpolateReds)
-    .domain([0, 1700])
+  let dynamicColorScale
+  let legendSvg
 
   const svg = d3.select('#HeatChart')
     .append('svg')
     .attr('width', width)
     .attr('height', height)
+
+  svg.append('rect')
+    .attr('x', 5)
+    .attr('y', 7)
+    .attr('width', width - 10)
+    .attr('height', height - 10)
+    .attr('rx', 15) // bordes redondeados
+    .attr('ry', 15)
+    .attr('fill', 'none')
+    .attr('stroke', '#666')
+    .attr('stroke-width', 2)
+    .style('filter', 'drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.2))')
+    .lower()
 
   const projection = d3.geoMercator().scale(140).translate([width / 2, height / 1.4])
   const path = d3.geoPath(projection)
@@ -49,15 +61,85 @@ document.addEventListener('DOMContentLoaded', async () => {
   })
 
   function updateMapByYear (dataForYear) {
-    console.log('Actualizando mapa para el mes:', dataForYear)
+    const maxDeaths = d3.max(Object.values(dataForYear))
+    dynamicColorScale = d3.scaleSequential(d3.interpolateReds).domain([0, maxDeaths])
+    // Aplicar transición solo al color de relleno
     g.selectAll('path')
       .transition()
       .duration(500)
       .attr('fill', d => {
         const countryName = d.properties.name
         const deaths = dataForYear[countryName] || 0
-        return colorScale(deaths)
+        return dynamicColorScale(deaths)
       })
+    // Agregar tooltip interactividad
+    g.selectAll('path')
+      .on('mouseover', function (event, d) {
+        const countryName = d.properties.name
+        const deaths = dataForYear[countryName] || 0
+        d3.select('#tooltip')
+          .style('display', 'block')
+          .html(`<strong>${countryName}</strong><br>Muertes: ${deaths.toLocaleString()}`)
+      })
+      .on('mousemove', function (event) {
+        d3.select('#tooltip')
+          .style('left', (event.pageX + 10) + 'px')
+          .style('top', (event.pageY - 20) + 'px')
+      })
+      .on('mouseout', function () {
+        d3.select('#tooltip').style('display', 'none')
+      })
+    updateColorLegend(maxDeaths)
+  }
+
+  function updateColorLegend (maxValue) {
+    const legendWidth = 50
+    const legendHeight = 300
+
+    if (legendSvg) legendSvg.remove()
+
+    legendSvg = d3.select('#HeatChart')
+      .append('svg')
+      .attr('width', 100)
+      .attr('height', legendHeight + 40)
+      .attr('style', 'margin-top: 20px')
+
+    const defs = legendSvg.append('defs')
+    const linearGradient = defs.append('linearGradient')
+      .attr('id', 'linear-gradient')
+      .attr('x1', '0%')
+      .attr('y1', '100%')
+      .attr('x2', '0%')
+      .attr('y2', '0%')
+
+    linearGradient.selectAll('stop')
+      .data([
+        { offset: '0%', color: dynamicColorScale(0) },
+        { offset: '100%', color: dynamicColorScale(maxValue) }
+      ])
+      .enter()
+      .append('stop')
+      .attr('offset', d => d.offset)
+      .attr('stop-color', d => d.color)
+
+    legendSvg.append('rect')
+      .attr('x', 40)
+      .attr('y', 10)
+      .attr('width', legendWidth)
+      .attr('height', legendHeight)
+      .style('fill', 'url(#linear-gradient)')
+      .style('stroke', '#000')
+      .style('stroke-width', 0.5)
+
+    const legendScale = d3.scaleLinear()
+      .domain([0, maxValue])
+      .range([legendHeight + 10, 10])
+
+    const legendAxis = d3.axisLeft(legendScale).ticks(5)
+
+    legendSvg.append('g')
+      .attr('transform', 'translate(40, 0)')
+      .call(legendAxis)
   }
 
   yearSelector.addEventListener('change', e => {
