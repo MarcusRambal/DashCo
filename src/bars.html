@@ -14,19 +14,15 @@
     </header>
 
     <div id="barChartContainer" style="width: 100%; overflow-x: auto;">
-        <svg id="barChart" height="500">
-        </svg>
-        <div id="tooltip" style="position: absolute; opacity: 0; background: #fff; border: 1px solid #ccc; padding: 5px; border-radius: 3px; pointer-events: none;"></div>
+      <div id = "barControls">
+        <select id="barYearSelector"></select>
+        <button id = "showMore">Mostrar mas</button>
+      </div>
+      
+      <svg id="barChart" height="500"></svg>
+      <div id="tooltip" style="position: absolute; opacity: 0; background: #fff; border: 1px solid #ccc; padding: 5px; border-radius: 3px; pointer-events: none;"></div>
       </div> <!-- barChartContainer -->
       
-      <select id="barYearSelector">
-        <!-- aquí se llenan los meses dinámicamente -->
-      </select>
-
-      <button id = "showMore">Mostrar mas</button>
-      
-      
-
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <script src="bars.js"></script>
 </body>
