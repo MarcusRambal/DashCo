@@ -11,7 +11,7 @@ app.use(cors())
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '',
+  password: 'CampanaPlateada1902',
   database: 'covid_data'
 })
 
@@ -66,7 +66,7 @@ app.get('/data', (req, res) => {
       }
 
       grouped[entity].push({
-        day: month, 
+        day: month, // Lo renombramos a 'day' para que D3 lo use directamente
         daily_deaths: Number(total_deaths)
       })
     })
@@ -81,7 +81,8 @@ app.get('/data', (req, res) => {
   })
 })
 
-app.get('/HeatData', (req, res) => {
+/*
+  app.get('/HeatData', (req, res) => {
   const query = `
     SELECT entity AS country, DATE_FORMAT(day, '%Y-%m-01') AS month, SUM(daily_deaths) AS total_deaths
     FROM casos_covid
@@ -104,6 +105,35 @@ app.get('/HeatData', (req, res) => {
     })
 
     res.json(dataByMonth)
+  })
+})
+ */
+app.get('/dataYear', (req, res) => {
+  const query = `
+    SELECT entity AS country, YEAR(day) AS year, SUM(daily_deaths) AS total_deaths
+    FROM casos_covid
+    GROUP BY entity, year
+    ORDER BY year, country
+  `
+
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('🚨 Error en la consulta:', err)
+      return res.status(500).send('Error en la base de datos')
+    }
+
+    const dataByYear = {}
+    results.forEach(row => {
+      const { country, year, total_deaths } = row
+
+      if (!dataByYear[year]) {
+        dataByYear[year] = {}
+      }
+
+      dataByYear[year][country] = total_deaths
+    })
+
+    res.json(dataByYear)
   })
 })
 
