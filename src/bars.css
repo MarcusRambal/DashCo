@@ -9,7 +9,6 @@
     background-color: #0b5394;
     color: #fff;
     padding: 20px;
-    border-radius: 0 0 10px 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -29,5 +28,45 @@
   }
   
   .header a:hover {
+    background-color: #1854c0;
+  }
+
+  #barControls {
+    position: absolute;
+    top: 100px;
+    right: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 10;
+  }
+  
+  #barYearSelector {
+    padding: 8px 12px;
+    font-size: 1rem;
+    border: 2px solid #2176ff;
+    border-radius: 8px;
+    background-color: #f0f8ff;
+    color: #0b5394;
+    transition: all 0.3s ease;
+  }
+  
+  #barYearSelector:hover {
+    background-color: #e6f0ff;
+    border-color: #1854c0;
+  }
+  
+  #showMore {
+    padding: 10px 15px;
+    font-size: 1rem;
+    background-color: #2176ff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  #showMore:hover {
     background-color: #1854c0;
   }
