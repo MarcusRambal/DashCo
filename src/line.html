@@ -10,26 +10,21 @@
     <header class="header" id="header">
         <h1>Dashco</h1>
         <a href="index.html">Volver a la página principal</a>
-        <!-- Botón para alternar modo en tiempo real (opcional) -->
     </header>
 
     <div class="LineContainer" id="LineContainer">
-
-        <!-- Sección de selección de países -->
         <div id="country-selection">
             <h3>Selecciona países</h3>
-            <div id="country-list">
-            </div>
-
+            <input type="text" id="country-search" placeholder="Buscar país..." />
+            <div id="country-list"></div>
             <button id="update-chart">Actualizar gráfico</button>
-        </div>
+        </div> <!-- country-selection -->
 
-        <!-- Contenedor del gráfico -->
         <div id="LineChart">
             <h2>Gráfico de Lineas</h2>
             <p>Comparación de muertes por COVID en diferentes regiones.</p>
-        </div>
-    </div>
+        </div><!-- LineChart -->
+    </div> <!-- LineContainer -->
 
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <script src="line.js"></script>
