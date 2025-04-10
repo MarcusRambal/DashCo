@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const barData = await loadDataPerYear()
   const yearSelector = document.getElementById('barYearSelector')
 
-  // Llenar el selector con años
   Object.keys(barData).forEach(year => {
     const option = document.createElement('option')
     option.value = year
@@ -44,7 +43,7 @@ let showingAll = false
 
 function renderBarChart (dataForYear, showAll = false) {
   const svg = d3.select('#barChart')
-  svg.selectAll('*').remove() // Limpiar gráfico anterior
+  svg.selectAll('*').remove()
 
   let data = Object.entries(dataForYear)
     .map(([country, deaths]) => ({ country, deaths }))
@@ -55,7 +54,7 @@ function renderBarChart (dataForYear, showAll = false) {
   }
 
   const margin = { top: 20, right: 20, bottom: 20, left: 160 }
-  const width = 1000
+  const width = 1200
   const barHeight = 20
   const height = data.length * (barHeight + 5) + margin.top + margin.bottom
 
@@ -77,7 +76,6 @@ function renderBarChart (dataForYear, showAll = false) {
   const g = svg.append('g')
     .attr('transform', `translate(${margin.left},${margin.top})`)
 
-  // Dibujar barras horizontales
   g.selectAll('rect')
     .data(data)
     .enter().append('rect')
@@ -85,7 +83,7 @@ function renderBarChart (dataForYear, showAll = false) {
     .attr('x', 0)
     .attr('height', y.bandwidth())
     .attr('width', d => x(d.deaths))
-    .attr('fill', 'steelblue')
+    .attr('fill', 'rgb(255, 105, 180)')
     .on('mouseover', function (event, d) { // Mostrar tooltip
       d3.select(this).attr('fill', 'orange')
       const tooltip = d3.select('#tooltip')
@@ -95,7 +93,7 @@ function renderBarChart (dataForYear, showAll = false) {
         .style('top', `${event.pageY - 28}px`)
     })
     .on('mouseout', function () { // Ocultar tooltip
-      d3.select(this).attr('fill', 'steelblue')
+      d3.select(this).attr('fill', 'rgb(141, 19, 80)')
       d3.select('#tooltip').style('opacity', 0)
     })
 
