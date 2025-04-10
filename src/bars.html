@@ -10,17 +10,16 @@
     <header class="header" id="header">
         <h1>Dashco</h1>
         <a href="index.html">Volver a la página principal</a>
-        <!--real time button here-->
     </header>
 
     <div id="barChartContainer" style="width: 100%; overflow-x: auto;">
       <div id = "barControls">
         <select id="barYearSelector"></select>
         <button id = "showMore">Mostrar mas</button>
-      </div>
+      </div> <!-- barControls -->
       
       <svg id="barChart" height="500"></svg>
-      <div id="tooltip" style="position: absolute; opacity: 0; background: #fff; border: 1px solid #ccc; padding: 5px; border-radius: 3px; pointer-events: none;"></div>
+      <div id="tooltip" style="position: absolute; opacity: 0; background: #161515; border: 1px solid #ccc; padding: 5px; border-radius: 3px; pointer-events: none;"></div>
       </div> <!-- barChartContainer -->
       
     <script src="https://d3js.org/d3.v6.min.js"></script>
