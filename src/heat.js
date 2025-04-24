@@ -1,5 +1,9 @@
 /* eslint-disable no-undef */
 document.addEventListener('DOMContentLoaded', async () => {
+  const dataYear = await loadHeatData()
+  const CountryReference = await d3.json('./../countries.json')
+  await standardNames(CountryReference, dataYear)
+  console.log(CountryReference)
   const yearSelector = document.getElementById('yearSelector')
   const width = 1200
   const height = 600
@@ -16,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     .attr('y', 7)
     .attr('width', width - 10)
     .attr('height', height - 10)
-    .attr('rx', 15) // bordes redondeados
+    .attr('rx', 15)
     .attr('ry', 15)
     .attr('fill', 'none')
     .attr('stroke', '#666')
@@ -49,7 +53,33 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  const dataYear = await loadHeatData()
+  const AkaMap = {}
+
+  AkaMap['united states of america'] = 'United States'
+  AkaMap['russian federation'] = 'Russia'
+  AkaMap["côte d'ivoire"] = 'Ivory Coast'
+  AkaMap['democratic republic of the congo'] = 'Congo (Kinshasa)'
+  AkaMap.congo = 'Congo (Brazzaville)'
+  AkaMap['venezuela (bolivarian republic of)'] = 'Venezuela'
+  AkaMap['korea, republic of'] = 'South Korea'
+  AkaMap["korea, democratic people's republic of"] = 'North Korea'
+
+  function normalizeName (str) {
+    return str.trim().toLowerCase()
+  }
+
+  async function standardNames (CountryRef, Data) {
+    const nameData = Object.keys(Data).map(normalizeName)
+
+    CountryRef.forEach(p => {
+      const nameRef = p.nameEN.trim()
+      const nameNorm = normalizeName(nameRef)
+
+      if (nameData.includes(nameNorm)) {
+        AkaMap[nameNorm] = nameRef
+      }
+    })
+  }
 
   if (!dataYear) return
 
@@ -61,25 +91,28 @@ document.addEventListener('DOMContentLoaded', async () => {
   })
 
   function updateMapByYear (dataForYear) {
+    console.log(dataForYear)
     const maxDeaths = d3.max(Object.values(dataForYear))
     dynamicColorScale = d3.scaleSequential(d3.interpolateReds).domain([0, maxDeaths])
-    // Aplicar transición solo al color de relleno
+    const getDeaths = d => {
+      const rawName = d.properties.name
+      const key = AkaMap[normalizeName(rawName)] || rawName
+      return dataForYear[key] || 0
+    }
+
     g.selectAll('path')
       .transition()
       .duration(500)
-      .attr('fill', d => {
-        const countryName = d.properties.name
-        const deaths = dataForYear[countryName] || 0
-        return dynamicColorScale(deaths)
-      })
-    // Agregar tooltip interactividad
+      .attr('fill', d => dynamicColorScale(getDeaths(d)))
+
     g.selectAll('path')
       .on('mouseover', function (event, d) {
-        const countryName = d.properties.name
-        const deaths = dataForYear[countryName] || 0
+        const rawName = d.properties.name
+        const key = AkaMap[normalizeName(rawName)] || rawName
+        const deaths = dataForYear[key] || 0
         d3.select('#tooltip')
           .style('display', 'block')
-          .html(`<strong>${countryName}</strong><br>Muertes: ${deaths.toLocaleString()}`)
+          .html(`<strong>${rawName}</strong><br>Muertes: ${deaths.toLocaleString()}`)
       })
       .on('mousemove', function (event) {
         d3.select('#tooltip')
