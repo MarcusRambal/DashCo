@@ -11,16 +11,16 @@ app.use(cors())
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'CampanaPlateada1902',
+  password: '',
   database: 'covid_data'
 })
 
 db.connect(err => {
   if (err) {
-    console.error('🚨 Error conectando a MySQL:', err)
+    console.error('Error conectando a MySQL:', err)
     return
   }
-  console.log('✅ Conectado a MySQL')
+  console.log('Conectado a MySQL')
 })
 
 app.use(express.static('src'))
@@ -30,11 +30,11 @@ app.get('/countries', (req, res) => {
   const query = 'SELECT DISTINCT entity FROM casos_covid'
   db.query(query, (err, results) => {
     if (err) {
-      console.error('🚨 Error en la consulta:', err)
+      console.error('Error en la consulta:', err)
       return res.status(500).send('Error en la base de datos')
     }
     res.json(results.map(row => row.entity))
-    console.log('✅ Consulta de países exitosa')
+    console.log('Consulta de países exitosa')
   })
 })
 
@@ -52,7 +52,7 @@ app.get('/data', (req, res) => {
 
   db.query(query, selectedCountries, (err, results) => {
     if (err) {
-      console.error('🚨 Error en la consulta:', err)
+      console.error('Error en la consulta:', err)
       return res.status(500).send('Error en la base de datos')
     }
     const grouped = {}
@@ -66,7 +66,7 @@ app.get('/data', (req, res) => {
       }
 
       grouped[entity].push({
-        day: month, // Lo renombramos a 'day' para que D3 lo use directamente
+        day: month,
         daily_deaths: Number(total_deaths)
       })
     })
@@ -77,37 +77,10 @@ app.get('/data', (req, res) => {
     }))
 
     res.json(formatted)
-    console.log('✅ Consulta de datos exitosa')
+    console.log('Consulta de datos exitosa')
   })
 })
 
-/*
-  app.get('/HeatData', (req, res) => {
-  const query = `
-    SELECT entity AS country, DATE_FORMAT(day, '%Y-%m-01') AS month, SUM(daily_deaths) AS total_deaths
-    FROM casos_covid
-    GROUP BY entity, month
-    ORDER BY month, country
-  `
-
-  db.query(query, (err, results) => {
-    if (err) {
-      console.error('🚨 Error en la consulta:', err)
-      return res.status(500).send('Error en la base de datos')
-    }
-
-    const dataByMonth = {}
-
-    results.forEach(row => {
-      const { country, month, total_deaths } = row
-      if (!dataByMonth[month]) dataByMonth[month] = {}
-      dataByMonth[month][country] = total_deaths
-    })
-
-    res.json(dataByMonth)
-  })
-})
- */
 app.get('/dataYear', (req, res) => {
   const query = `
     SELECT entity AS country, YEAR(day) AS year, SUM(daily_deaths) AS total_deaths
@@ -118,7 +91,7 @@ app.get('/dataYear', (req, res) => {
 
   db.query(query, (err, results) => {
     if (err) {
-      console.error('🚨 Error en la consulta:', err)
+      console.error('Error en la consulta:', err)
       return res.status(500).send('Error en la base de datos')
     }
 
@@ -137,7 +110,6 @@ app.get('/dataYear', (req, res) => {
   })
 })
 
-// Iniciar servidor
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`)
+  console.log(`Servidor corriendo en http://localhost:${PORT}`)
 })
